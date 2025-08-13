@@ -11,6 +11,8 @@ import TradeView from "./Components/Dasboard/TradeView";
 import Rewards from "./Components/Dasboard/Rewards";
 import InvestmentsPlan from "./Components/Dasboard/InvestmentsPlan"
 import MyWallet from "./Components/Dasboard/MyWallet"
+import LoginPage from "./Components/Auth/Login";
+import SignUpPage from "./Components/Auth/SignUp";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
           <Route path="/Rewards" element={<Rewards />} />
           <Route path="/InvestmentsPlan" element={<InvestmentsPlan />} />
           <Route path="/MyWallet" element={<MyWallet />} />
+           <Route path="/Login" element={<LoginPage />} />
+            <Route path="/SignUp" element={<SignUpPage />} />
         </Routes>
       </Router>
     

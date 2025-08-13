@@ -10,7 +10,7 @@ const Navbar = () => {
   };
 
   const handleSignUp = () => {
-    navigate('/login');
+    navigate('/Login');
   };
   return (
     <nav className="w-full bg-white border-b border-gray-100 px-6 py-4">
@@ -59,17 +59,18 @@ const Navbar = () => {
         {/* Auth Buttons */}
        <div className="hidden md:flex items-center space-x-4">
   <Link 
-    to="/login" 
+    to="/Login" 
     className="px-6 py-1 text-black font-semibold text-base border-2 border-gray-300 rounded-full hover:border-gray-400 hover:text-gray-600 transition-colors duration-200"
   >
     Login
   </Link>
-  <button 
-    onClick={handleSignUp}
+
+   <Link 
+    to="/SignUp" 
     className="px-6 py-1 bg-red-800 text-white font-semibold text-base rounded-full hover:bg-red-700 transition-colors duration-200"
   >
     Sign Up
-  </button>
+  </Link>
 </div>
 
         {/* Mobile Menu Button */}

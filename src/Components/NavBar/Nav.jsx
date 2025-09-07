@@ -1,151 +1,170 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import {
+  LayoutDashboard,
+  CreditCard,
+  ArrowUpDown,
+  FileText,
+  User,
+  LogOut,
+  Bell,
+  Menu,
+  X
+} from 'lucide-react';
 
-const Navbar = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+function Sidebar({ activeTab, onTabChange }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+  const menuItems = [
+    { id: 'Overview', label: 'Overview', icon: LayoutDashboard, path: '/' },
+    { id: 'Account', label: 'Account', icon: CreditCard, path: '/Account' },
+    { id: 'Transfers', label: 'Transfers', icon: ArrowUpDown, path: '/Transfers' },
+    { id: 'Statements', label: 'Statements', icon: FileText, path: '/statements' },
+    { id: 'Cards', label: 'Cards', icon: CreditCard, path: '/Cards' },
+    { id: 'Transactions', label: 'Transactions', icon: ArrowUpDown, path: '/transactions' }
+  ];
+
+  
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+     
+      if (!mobile && sidebarOpen) {
+        setSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [sidebarOpen]);
+
+  const handleNavigation = (item) => {
+    navigate(item.path);
+    if (onTabChange) {
+      onTabChange(item.id);
+    }
+    
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
   };
 
-  const handleSignUp = () => {
-    navigate('/Login');
+  const handleProfileClick = () => {
+    navigate('/Profile');
+    if (onTabChange) {
+      onTabChange('Profile');
+    }
+    
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
   };
+
+  const handleLogout = () => {
+    console.log('Logging out...');
+    
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+  };
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   return (
-    <nav className="w-full bg-white border-b border-gray-100 px-6 py-4">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        
-        <div className="flex items-center">
-          <Link to="/" className="text-2xl font-bold text-black tracking-wider hover:text-gray-600 transition-colors duration-200">
-            TESLA
-          </Link>
-        </div>
+    <>
+     
+      {isMobile && (
+        <button
+          onClick={toggleSidebar}
+          className="fixed top-4 left-4 z-50 p-2 bg-red-600 text-white rounded-md focus:outline-none"
+        >
+          {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      )}
 
-        
-        <div className="hidden md:flex items-center space-x-8">
-          <Link 
-            to="/" 
-            className="text-black font-semibold text-lg hover:text-gray-600 transition-colors duration-200"
-          >
-            Home
-          </Link>
-          <Link 
-            to="/Investment" 
-            className="text-black font-semibold text-lg hover:text-gray-600 transition-colors duration-200"
-          >
-            Investment
-          </Link>
-          <Link 
-            to="/Products" 
-            className="text-black font-semibold text-lg hover:text-gray-600 transition-colors duration-200"
-          >
-            Tesla Products
-          </Link>
-          <Link 
-            to="/Support" 
-            className="text-black font-semibold text-lg hover:text-gray-600 transition-colors duration-200"
-          >
-            Support
-          </Link>
-          <Link 
-            to="/Security" 
-            className="text-black font-semibold text-lg hover:text-gray-600 transition-colors duration-200"
-          >
-            Security & Privacy
-          </Link>
-        </div>
+      
+      {isMobile && sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setSidebarOpen(false)}
+        ></div>
+      )}
 
-        {/* Auth Buttons */}
-       <div className="hidden md:flex items-center space-x-4">
-  <Link 
-    to="/Login" 
-    className="px-6 py-1 text-black font-semibold text-base border-2 border-gray-300 rounded-full hover:border-gray-400 hover:text-gray-600 transition-colors duration-200"
-  >
-    Login
-  </Link>
-
-   <Link 
-    to="/SignUp" 
-    className="px-6 py-1 bg-red-800 text-white font-semibold text-base rounded-full hover:bg-red-700 transition-colors duration-200"
-  >
-    Sign Up
-  </Link>
-</div>
-
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
+     
+      <div className={`
+        ${isMobile ? 'fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out' : 'relative'} 
+        ${isMobile && !sidebarOpen ? '-translate-x-full' : 'translate-x-0'}
+        w-64 bg-red-600 text-white flex flex-col h-screen
+      `}>
+       
+        <div className="p-6 flex items-center justify-center space-x-4">
           <button 
-            onClick={toggleMobileMenu}
-            className="text-black hover:text-gray-600"
+            onClick={handleProfileClick}
+            className="w-12 h-12 rounded-full overflow-hidden border-2 border-white hover:border-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-red-600"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            <img 
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+              alt="Profile"
+              className="w-full h-full object-cover"
+            />
+          </button>
+          <button className="relative p-2 text-white hover:bg-red-500 rounded-full transition-colors">
+            <Bell size={20} />
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full"></span>
+          </button>
+        </div>
+
+       
+        <nav className="flex-1">
+          <div className="space-y-1">
+            {menuItems.map((item) => {
+              const IconComponent = item.icon;
+              const isActive = location.pathname === item.path;
+                      
+              return (
+                <button 
+                  key={item.id}
+                  onClick={() => handleNavigation(item)}
+                  className={`w-full flex items-center space-x-4 px-6 py-4 text-left hover:bg-red-500 transition-colors ${
+                    isActive ? 'bg-white text-red-600 font-semibold' : 'text-white'
+                  }`}
+                >
+                  <IconComponent size={20} />
+                  <span className="font-medium">{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+
+       
+        <div className="p-6 space-y-2">
+          <button 
+            onClick={handleProfileClick}
+            className={`w-full flex items-center space-x-4 px-4 py-3 text-left hover:bg-red-500 rounded-lg transition-colors ${
+              location.pathname === '/profile' ? 'bg-white text-red-600 font-semibold' : 'text-white'
+            }`}
+          >
+            <User size={20} />
+            <span className="font-medium">Profile</span>
+          </button>
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center space-x-4 px-4 py-3 text-left bg-white text-red-600 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+          >
+            <LogOut size={20} />
+            <span className="font-medium">Log Out</span>
           </button>
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      <div className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'} mt-4 pb-4`}>
-        <div className="flex flex-col space-y-4">
-          <Link 
-            to="/" 
-            className="text-black font-semibold text-lg hover:text-gray-600 transition-colors duration-200"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Home
-          </Link>
-          <Link 
-            to="/Investment" 
-            className="text-black font-semibold text-lg hover:text-gray-600 transition-colors duration-200"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Investment
-          </Link>
-          <Link 
-            to="/Products" 
-            className="text-black font-semibold text-lg hover:text-gray-600 transition-colors duration-200"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Tesla Products
-          </Link>
-          <Link 
-            to="/Support" 
-            className="text-black font-semibold text-lg hover:text-gray-600 transition-colors duration-200"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Support
-          </Link>
-          <Link 
-            to="/Security" 
-            className="text-black font-semibold text-lg hover:text-gray-600 transition-colors duration-200"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Security & Privacy
-          </Link>
-          <div className="flex flex-col space-y-2 pt-4">
-            <Link 
-              to="/login" 
-              className="text-left text-black font-semibold text-lg hover:text-gray-600 transition-colors duration-200"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Login
-            </Link>
-            <button 
-              onClick={() => {
-                handleSignUp();
-                setIsMobileMenuOpen(false);
-              }}
-              className="text-left px-6 py-2 bg-red-800 text-white font-semibold text-lg rounded-full hover:bg-red-700 transition-colors duration-200"
-            >
-              Sign Up
-            </button>
-          </div>
-        </div>
-      </div>
-    </nav>
+    </>
   );
-};
+}
 
-export default Navbar;
+export default Sidebar;

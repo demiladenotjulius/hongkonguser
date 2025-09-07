@@ -1,43 +1,30 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Investment from "./Components/Dasboard/Investment"
-import Home  from "./Components/Dasboard/Home";
-import {Support} from "./Components/Dasboard/Support";
-import {Security} from "./Components/Dasboard/Security";
-import {Tesla} from "./Components/Dasboard/Tesla";
-import Navbar from "./Components/NavBar/Nav";
-import SideBar from "./Components/Dasboard/SideBar";
-import Exchange from "./Components/Dasboard/Exchange";
-import TradeView from "./Components/Dasboard/TradeView";
-import Rewards from "./Components/Dasboard/Rewards";
-import InvestmentsPlan from "./Components/Dasboard/InvestmentsPlan"
-import MyWallet from "./Components/Dasboard/MyWallet"
-import LoginPage from "./Components/Auth/Login";
-import SignUpPage from "./Components/Auth/SignUp";
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import './App.css';
+import Dashboard from './Components/Dasboard/Dasboard';
+import Account from "./Components/Dasboard/Account";
+import Transfers  from './Components/Dasboard/Transfers';
+import  Profile  from './Components/Dasboard/Profile';
+import  Transactions  from './Components/Dasboard/Transactions';
+import CardsPage from './Components/Dasboard/Cards';
+
 
 function App() {
   return (
-    
-      <Router>
-        <Navbar />
+    <BrowserRouter>
+      <div className="App">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Investment" element={<Investment />} />
-          <Route path="/Security" element={<Security />} />
-          <Route path="/Support" element={<Support />} />
-          <Route path="/Tesla" element={<Tesla />} />
-          <Route path="/SideBar" element={<SideBar />} />
-          <Route path="/Exchange" element={<Exchange />} />
-          <Route path="/TradeView" element={<TradeView />} />
-          <Route path="/Rewards" element={<Rewards />} />
-          <Route path="/InvestmentsPlan" element={<InvestmentsPlan />} />
-          <Route path="/MyWallet" element={<MyWallet />} />
-           <Route path="/Login" element={<LoginPage />} />
-            <Route path="/SignUp" element={<SignUpPage />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/Account" element={<Account />} />
+          <Route path="/Transfers" element={<Transfers />} />
+          <Route path="/Profile" element={<Profile />} />
+          <Route path="/Transactions" element={<Transactions />} />
+           <Route path="/Cards" element={<CardsPage />} />
+           
         </Routes>
-      </Router>
-    
+      </div>
+    </BrowserRouter>
   );
 }
 
 export default App;
-
